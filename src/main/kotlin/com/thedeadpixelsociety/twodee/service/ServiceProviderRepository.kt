@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.ObjectMap
 
 /**
  * A repository for registering and retrieving various service providers. You should prefer to use the helper functions
- * (singletonProvider and delegateProvider) to access this instead.
+ * (serviceSingleton and delegateProvider) to access this instead.
  */
 object ServiceProviderRepository : Disposable {
     private val providerMap = ObjectMap<Class<*>, ServiceProvider<*>>()
@@ -28,10 +28,12 @@ object ServiceProviderRepository : Disposable {
      * @exception IllegalArgumentException if the requested provider has not been registered.
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> get(providerClass: Class<T>): ServiceProvider<T> {
+    fun <T> getProvider(providerClass: Class<T>): ServiceProvider<T> {
         return providerMap.get(providerClass, null) as? ServiceProvider<T>
                 ?: throw IllegalArgumentException("No provider registered for class ${providerClass.name}")
     }
+
+    fun <T> getService(providerClass: Class<T>) = getProvider(providerClass)()
 
     override fun dispose() {
         providerMap.values().forEach { it.dispose() }
