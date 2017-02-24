@@ -9,16 +9,6 @@ import com.thedeadpixelsociety.twodee.Func
  * @see Pool
  */
 class InvokablePool<T>(val pool: Pool<T>) {
-    /**
-     * Creates an invokable pool with a provider function. This generates a new pool that uses the provider to create
-     * instances of poolable object.
-     * @param provider The object provider.
-     * @param max The maximum number of poolable objects.
-     */
-    constructor(provider: Func<T>, max: Int) : this(object : Pool<T>(max) {
-        override fun newObject() = provider()
-    })
-
     operator fun invoke(): T = pool.obtain()
 
     operator fun invoke(obj: T) {

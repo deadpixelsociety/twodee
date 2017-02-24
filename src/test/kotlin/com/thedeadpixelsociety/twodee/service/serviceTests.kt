@@ -5,19 +5,34 @@ import org.junit.Assert.assertSame
 import org.junit.Test
 
 class ServiceTests {
+    private val singletonDelegate by injectService<SingletonService>()
+    private val factoryDelegate by injectService<FactoryService>()
+
     @Test
     fun serviceSingletonReturnsSameInstance() {
-        val service = MockService()
-        serviceSingleton(service)
-        assertSame(service, service<MockService>())
+        serviceSingleton(SingletonService())
+        assertSame(service<SingletonService>(), service<SingletonService>())
     }
 
     @Test
     fun serviceFactoryReturnsDifferentInstance() {
-        serviceFactory { MockService() }
-        val service = ServiceProviderRepository.getService(MockService::class.java)
-        assertNotSame(service, service<MockService>())
+        serviceFactory { FactoryService() }
+        assertNotSame(service<FactoryService>(), service<FactoryService>())
     }
 
-    class MockService
+    @Test
+    fun injectServiceFromSingleton() {
+        serviceSingleton(SingletonService())
+        assertSame(singletonDelegate, singletonDelegate)
+    }
+
+    @Test
+    fun injectServiceFromFactory() {
+        serviceFactory { FactoryService() }
+        assertNotSame(factoryDelegate, factoryDelegate)
+    }
+
+    class SingletonService
+
+    class FactoryService
 }

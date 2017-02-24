@@ -1,5 +1,6 @@
 package com.thedeadpixelsociety.twodee.pooling
 
+import com.badlogic.gdx.utils.Pool
 import com.badlogic.gdx.utils.Pools
 import com.thedeadpixelsociety.twodee.Func
 import kotlin.properties.ReadOnlyProperty
@@ -11,15 +12,20 @@ import kotlin.reflect.KProperty
  * @param T The pool type.
  * @param poolClass The pool class.
  * @param max The maximum number of poolable objects. Defaults to 100.
- * @param provider The provider function, if any. This is invoked to create a new instance of a pooled object.
+ * @param factory The factory function, if any. This is invoked to create a new instance of a pooled object.
  */
-class InvokablePoolDelegate<T>(poolClass: Class<T>, max: Int = 100, provider: Func<T>? = null)
+class InvokablePoolDelegate<T>(poolClass: Class<T>, max: Int = 100, factory: Func<T>? = null)
     : ReadOnlyProperty<Any, InvokablePool<T>> {
 
-    private val invokablePool: InvokablePool<T> = if (provider == null)
-        InvokablePool(Pools.get<T>(poolClass, max))
-    else
-        InvokablePool(provider, max)
+    private val invokablePool: InvokablePool<T>
+
+    init {
+        val pool = if (factory == null) Pools.get(poolClass, max) else object : Pool<T>() {
+            override fun newObject() = factory()
+        }
+
+        invokablePool = InvokablePool(pool)
+    }
 
     override fun getValue(thisRef: Any, property: KProperty<*>) = invokablePool
 }

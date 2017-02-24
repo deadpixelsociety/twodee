@@ -12,7 +12,7 @@ import com.thedeadpixelsociety.twodee.gdxArray
  *
  * @see Scene
  */
-class StackSceneController : SceneController {
+class StackSceneController(private var width: Int, private var height: Int) : SceneController {
     private val stack = gdxArray<Scene>()
 
     override fun scenes(): List<Scene> = stack.toList()
@@ -20,7 +20,7 @@ class StackSceneController : SceneController {
     override fun add(scene: Scene) {
         stack.add(scene)
         scene.added()
-        scene.resize(Gdx.graphics.width, Gdx.graphics.height)
+        scene.resize(width, height)
     }
 
     override fun remove(scene: Scene) {
@@ -38,6 +38,8 @@ class StackSceneController : SceneController {
     }
 
     override fun resize(width: Int, height: Int) {
+        this.width = width
+        this.height = height
         scenes().forEach { it.resize(width, height) }
     }
 

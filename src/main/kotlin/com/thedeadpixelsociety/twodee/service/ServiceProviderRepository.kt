@@ -13,27 +13,34 @@ object ServiceProviderRepository : Disposable {
     /**
      * Registers the specified service provider for the specified class.
      * @param T The provider type.
-     * @param providerClass The provider class.
+     * @param serviceClass The provider class.
      * @param provider The service provider.
      */
-    fun <T> register(providerClass: Class<T>, provider: ServiceProvider<T>) {
-        providerMap.put(providerClass, provider)
+    fun <T> register(serviceClass: Class<T>, provider: ServiceProvider<T>) {
+        providerMap.put(serviceClass, provider)
     }
 
     /**
      * Gets the specified service provider, if it exists. Otherwise an exception is thrown.
      * @param T The provider type.
-     * @param providerClass The provider class.
+     * @param serviceClass The provider class.
      * @return The service provider.
-     * @exception IllegalArgumentException if the requested provider has not been registered.
+     * @throws IllegalArgumentException if the requested provider has not been registered.
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> getProvider(providerClass: Class<T>): ServiceProvider<T> {
-        return providerMap.get(providerClass, null) as? ServiceProvider<T>
-                ?: throw IllegalArgumentException("No provider registered for class ${providerClass.name}")
+    fun <T> getProvider(serviceClass: Class<T>): ServiceProvider<T> {
+        return providerMap.get(serviceClass, null) as? ServiceProvider<T>
+                ?: throw IllegalArgumentException("No provider registered for class ${serviceClass.name}")
     }
 
-    fun <T> getService(providerClass: Class<T>) = getProvider(providerClass)()
+    /**
+     * Gets the specified service instance, if it exists. Otherwise an exception is thrown.
+     * @param T The service type.
+     * @param serviceClass The service class.
+     * @return An instance of the specified service.
+     * @throws IllegalArgumentException if the requested provider has not been registered.
+     */
+    fun <T> getService(serviceClass: Class<T>) = getProvider(serviceClass)()
 
     override fun dispose() {
         providerMap.values().forEach { it.dispose() }
