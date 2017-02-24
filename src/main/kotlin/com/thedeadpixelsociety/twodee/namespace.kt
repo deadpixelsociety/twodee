@@ -14,3 +14,24 @@ typealias Predicate<T> = (T) -> Boolean
  */
 fun <T> gdxArray() = com.badlogic.gdx.utils.Array<T>()
 
+/**
+ * A helper function to return the current update delta time, in seconds.
+ */
+fun deltaTime() = TimeController.deltaTime
+
+/**
+ * A helper function to return the total accumulated time, in seconds.
+ */
+fun totalTime() = TimeController.totalTime
+
+/**
+ * A helper function to create a tick event.
+ * @param interval The interval between ticks. Defaults to zero.
+ * @param repeat The number of times to repeat the event after the first invocation. Defaults to zero.
+ * @param func The function to perform at each tick.
+ * @see TimeController
+ * @see TimeController.TickEvent
+ */
+fun tickEvent(interval: Float = 0f, repeat: Int = 0, func: Func<Unit>) {
+    TimeController.register(TimeController.TickEvent(interval, repeat, func))
+}
