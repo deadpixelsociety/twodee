@@ -1,5 +1,7 @@
 package com.thedeadpixelsociety.twodee
 
+import com.badlogic.gdx.utils.Disposable
+
 typealias Action<T> = (T) -> Unit
 typealias Func<T> = () -> T
 typealias Predicate<T> = (T) -> Boolean
@@ -34,4 +36,17 @@ fun totalTime() = TimeController.totalTime
  */
 fun tickEvent(interval: Float = 0f, repeat: Int = 0, func: Func<Unit>) {
     TimeController.register(TimeController.TickEvent(interval, repeat, func))
+}
+
+/**
+ * A helper function to safely dispose a Disposable object after performing an action.
+ * @param T The disposable type.
+ * @param action The action to perform.
+ */
+fun <T : Disposable> T.using(action: Action<T>) {
+    try {
+        action(this)
+    } finally {
+        dispose()
+    }
 }
