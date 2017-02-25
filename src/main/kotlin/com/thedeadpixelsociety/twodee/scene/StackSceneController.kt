@@ -1,6 +1,5 @@
 package com.thedeadpixelsociety.twodee.scene
 
-import com.badlogic.gdx.Gdx
 import com.thedeadpixelsociety.twodee.gdxArray
 
 /**
@@ -48,6 +47,7 @@ class StackSceneController(private var width: Int, private var height: Int) : Sc
         val scenes = scenes()
         for (i in scenes.size - 1 downTo 0) {
             val scene = scenes[i]
+            scene.input(deltaTime)
             scene.update(deltaTime)
             if (!top) remove(scene)
             if (!scene.overlay) top = false

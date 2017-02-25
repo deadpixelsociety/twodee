@@ -1,7 +1,7 @@
 package com.thedeadpixelsociety.twodee.scene
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.Assert.*
 
 class SceneTests {
     @Test
@@ -16,6 +16,7 @@ class SceneTests {
         controller.resume()
         assertEquals(true, scene.wasResumed)
         controller.update(0f)
+        assertEquals(true, scene.handledInput)
         assertEquals(true, scene.wasUpdated)
         controller.render(0f)
         assertEquals(true, scene.wasRendered)
