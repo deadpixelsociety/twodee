@@ -23,6 +23,8 @@ abstract class TwoDeeGame : ApplicationAdapter() {
         serviceSingleton(StackSceneController(Gdx.graphics.width, Gdx.graphics.height))
         serviceSingleton(SpriteBatch())
         serviceSingleton(ShapeRenderer())
+
+        tickEvent { sceneService.update(deltaTime()) }
     }
 
     override fun pause() {
@@ -42,7 +44,6 @@ abstract class TwoDeeGame : ApplicationAdapter() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         TimeController.update(Gdx.graphics.deltaTime)
-        sceneService.update(deltaTime())
         sceneService.render(deltaTime())
     }
 
