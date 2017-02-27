@@ -30,7 +30,7 @@ object ServiceProviderRepository : Disposable {
     @Suppress("UNCHECKED_CAST")
     fun <T> getProvider(serviceClass: Class<T>): ServiceProvider<T> {
         return providerMap.get(serviceClass, null) as? ServiceProvider<T>
-                ?: throw IllegalArgumentException("No provider registered for class ${serviceClass.name}")
+                ?: throw MissingServiceException(serviceClass.name)
     }
 
     /**
