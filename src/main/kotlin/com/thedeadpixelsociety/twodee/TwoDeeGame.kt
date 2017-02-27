@@ -24,7 +24,7 @@ abstract class TwoDeeGame : ApplicationAdapter() {
         serviceSingleton(SpriteBatch())
         serviceSingleton(ShapeRenderer())
 
-        tickEvent(repeat = TimeController.REPEAT) { sceneService.update(deltaTime()) }
+        tickEvent(repeat = TimeController.INFINITE) { sceneService.update(deltaTime()) }
     }
 
     override fun pause() {

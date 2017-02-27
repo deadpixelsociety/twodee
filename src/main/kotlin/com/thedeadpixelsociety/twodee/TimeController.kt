@@ -8,11 +8,12 @@ package com.thedeadpixelsociety.twodee
 object TimeController {
     const val MAX_DELTA_TIME = .01666666666666666666666666666667f
     const val STEP = .01f
-    const val REPEAT = -1
+    const val INFINITE = -1
 
     private val events = gdxArray<TickEvent>()
     private var accumulator = 0f
-
+    private val addEventQueue = gdxArray<TickEvent>()
+    private val removeEventQueue = gdxArray<TickEvent>()
 
     /**
      * The current update delta time, in seconds.
@@ -42,7 +43,13 @@ object TimeController {
      * @param deltaTime The current delta time, in seconds.
      */
     fun update(deltaTime: Float) {
-        accumulator += deltaTime
+        addEventQueue.forEach { events.add(it) }
+        removeEventQueue.forEach { events.removeValue(it, true) }
+
+        addEventQueue.clear()
+        removeEventQueue.clear()
+
+        accumulator += Math.min(MAX_DELTA_TIME, deltaTime)
         while (accumulator >= STEP) {
             runEvents()
 
@@ -58,7 +65,15 @@ object TimeController {
      * @see TickEvent
      */
     fun register(event: TickEvent) {
-        events.add(event)
+        addEventQueue.add(event)
+    }
+
+    /**
+     * Unregisters a tick event.
+     * @param event The tick event.
+     */
+    fun unregister(event: TickEvent) {
+        removeEventQueue.add(event)
     }
 
     private fun runEvents() {
@@ -69,7 +84,7 @@ object TimeController {
                 it.count++
             }
 
-            if (it.repeat != REPEAT && it.count > it.repeat) events.removeValue(it, true)
+            if (it.repeat != INFINITE && it.count > it.repeat) events.removeValue(it, true)
         }
     }
 
