@@ -7,12 +7,12 @@ class TimeTests {
     @Test
     fun timeIncrements() {
         TimeController.reset()
-        TimeController.update(1f)
-        assertEquals(1f, TimeController.deltaTime)
-        assertEquals(1f, TimeController.totalTime)
-        TimeController.update(1f)
-        assertEquals(1f, TimeController.deltaTime)
-        assertEquals(2f, TimeController.totalTime)
+        TimeController.update(TimeController.STEP)
+        assertEquals(TimeController.STEP, TimeController.deltaTime)
+        assertEquals(TimeController.STEP, TimeController.totalTime)
+        TimeController.update(TimeController.STEP)
+        assertEquals(TimeController.STEP, TimeController.deltaTime)
+        assertEquals(TimeController.STEP * 2f, TimeController.totalTime)
     }
 
     @Test
@@ -23,7 +23,7 @@ class TimeTests {
 
         tickEvent { ticked = !ticked }
 
-        TimeController.update(1f)
+        TimeController.update(TimeController.STEP)
         assertEquals(true, ticked)
     }
 
@@ -37,7 +37,7 @@ class TimeTests {
             ticked = !ticked
         }
 
-        TimeController.update(1f)
+        TimeController.update(TimeController.STEP)
         assertEquals(true, ticked)
         TimeController.update(3f)
         assertEquals(false, ticked)
@@ -53,9 +53,9 @@ class TimeTests {
             ticked = !ticked
         }
 
-        TimeController.update(1f)
+        TimeController.update(TimeController.STEP)
         assertEquals(true, ticked)
-        TimeController.update(1f)
+        TimeController.update(TimeController.STEP)
         assertEquals(false, ticked)
     }
 }
