@@ -8,6 +8,7 @@ package com.thedeadpixelsociety.twodee
 object TimeController {
     const val MAX_DELTA_TIME = .01666666666666666666666666666667f
     const val STEP = .01f
+    const val REPEAT = -1
 
     private val events = gdxArray<TickEvent>()
     private var accumulator = 0f
@@ -68,7 +69,7 @@ object TimeController {
                 it.count++
             }
 
-            if (it.count > it.repeat) events.removeValue(it, true)
+            if (it.repeat != REPEAT && it.count > it.repeat) events.removeValue(it, true)
         }
     }
 
