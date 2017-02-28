@@ -2,6 +2,7 @@ package com.thedeadpixelsociety.twodee
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -20,6 +21,7 @@ abstract class TwoDeeGame : ApplicationAdapter() {
     override fun create() {
         TimeController.reset()
 
+        serviceSingleton(AssetManager())
         serviceSingleton(StackSceneController(Gdx.graphics.width, Gdx.graphics.height))
         serviceSingleton(SpriteBatch())
         serviceSingleton(ShapeRenderer())
