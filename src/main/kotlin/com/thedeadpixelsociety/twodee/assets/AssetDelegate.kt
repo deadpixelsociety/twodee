@@ -1,13 +1,37 @@
 package com.thedeadpixelsociety.twodee.assets
 
+import com.badlogic.gdx.assets.AssetManager
+import com.thedeadpixelsociety.twodee.Action
+import com.thedeadpixelsociety.twodee.service.injectService
+import java.lang.IllegalArgumentException
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-class AssetDelegate<out T>(private val assetType: AssetType<T>, private val filename: String) : ReadOnlyProperty<Any, T> {
+/**
+ * A read-only delegate for an asset.
+ * @param T The asset type.
+ * @param filename The asset filename.
+ * @param assetClass The asset class.
+ * @param init An optional initialization function.
+ */
+class AssetDelegate<out T>(
+        private val filename: String,
+        private val assetClass: Class<T>,
+        private val init: Action<T>? = null) : ReadOnlyProperty<Any, T> {
+    private val assetManager by injectService<AssetManager>()
     private var asset: T? = null
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T {
-        if (asset == null) asset = assetType.load(filename)
-        return asset ?: throw IllegalArgumentException("Missing asset $filename or asset not loaded.")
+        if (asset == null) asset = loadAsset()
+        return asset ?: throw IllegalArgumentException("$filename: Invalid asset or asset not loaded.")
+    }
+
+    private fun loadAsset(): T? {
+        if (!assetManager.isLoaded(filename, assetClass)) {
+            assetManager.load(filename, assetClass)
+            assetManager.finishLoading()
+        }
+
+        return assetManager.get(filename, assetClass)?.apply { init?.invoke(this) }
     }
 }
