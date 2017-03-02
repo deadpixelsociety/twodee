@@ -21,28 +21,18 @@ class Transform : PoolableComponent() {
      * The entity scale.
      */
     val scale = Vector2(1f, 1f)
-    /**
-     * The entity rotation in degrees.
-     */
-    var rotation = 0f
-        get() {
-            return field
-        }
+    var angle = 0f
+        get
+        set
 
-        set(value) {
-            lastRotation = field
-            field = value
-        }
+    var deltaAngle = 0f
+        get
+        private set
 
-    /**
-     * The last change in the rotation in degrees.
-     */
-    val rotationDelta: Float
-        get() {
-            return rotation - lastRotation
-        }
-
-    private var lastRotation = 0f
+    fun rotate(degrees: Float) {
+        deltaAngle = degrees
+        angle += degrees
+    }
 
     /**
      * The center of the entity as a sum of position and origin.
@@ -57,7 +47,7 @@ class Transform : PoolableComponent() {
     fun mat4() = Matrix4()
             .scale(scale.x, scale.y, 0f)
             .translate(-origin.x, -origin.y, 0f)
-            .rotate(Vector3(0f, 0f, 1f), rotation)
+            .rotate(Vector3(0f, 0f, 1f), angle)
             .translate(position.x, position.y, 0f)
 
     /**
@@ -68,13 +58,14 @@ class Transform : PoolableComponent() {
     fun mat3() = Matrix3()
             .scale(scale.x, scale.y)
             .translate(-origin.x, -origin.y)
-            .rotate(rotation)
+            .rotate(angle)
             .translate(position.x, position.y)
 
     override fun reset() {
         position.set(0f, 0f)
         origin.set(0f, 0f)
         scale.set(1f, 1f)
-        rotation = 0f
+        angle = 0f
+        deltaAngle = 0f
     }
 }

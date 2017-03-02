@@ -6,12 +6,16 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.backends.headless.HeadlessApplication
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.Matrix4
+import com.badlogic.gdx.math.Quaternion
+import com.badlogic.gdx.math.Vector3
 import com.thedeadpixelsociety.twodee.components.Dolly
 import com.thedeadpixelsociety.twodee.components.GroupMask
 import com.thedeadpixelsociety.twodee.components.Tag
 import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.dolly.actions.PanDolly
 import com.thedeadpixelsociety.twodee.components.dolly.actions.RotateDolly
+import com.thedeadpixelsociety.twodee.toVector3
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -56,13 +60,13 @@ class SystemTests {
 
         engine.update(.5f)
         assertEquals(.5f, transform.position.x)
-        assertEquals(45f, transform.rotation)
-        assertEquals(45f, transform.rotationDelta)
+        assertEquals(45f, transform.angle)
+        assertEquals(45f, transform.deltaAngle)
 
         engine.update(.5f)
         assertEquals(1f, transform.position.x)
-        assertEquals(90f, transform.rotation)
-        assertEquals(45f, transform.rotationDelta)
+        assertEquals(90f, transform.angle)
+        assertEquals(45f, transform.deltaAngle)
 
         assertTrue(dolly.actions.size == 0) // actions removed
     }

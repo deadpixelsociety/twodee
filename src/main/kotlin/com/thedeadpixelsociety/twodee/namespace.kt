@@ -1,5 +1,7 @@
 package com.thedeadpixelsociety.twodee
 
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Disposable
 
 typealias Action<T> = (T) -> Unit
@@ -50,3 +52,14 @@ fun <T : Disposable> T.using(action: Action<T>) {
         dispose()
     }
 }
+
+/**
+ * Converts a Vector2 into a Vector3 with zero as it's z value by default.
+ * @param z The z value to use.
+ */
+fun <T : Vector2> T.toVector3(z: Float = 0f) = Vector3(x, y, z)
+
+/**
+ * Converts a Vector3 into a Vector.
+ */
+fun <T : Vector3> T.toVector2() = Vector2(x, y)

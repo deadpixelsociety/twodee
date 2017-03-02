@@ -20,7 +20,7 @@ class RotateDolly : DollyAction() {
     private var elapsedTime = 0f
 
     override fun update(deltaTime: Float, camera: OrthographicCamera, transform: Transform): Boolean {
-        transform.rotation = transform.rotation + amount * deltaTime
+        transform.rotate(amount * deltaTime)
         if (duration > 0f) {
             elapsedTime = Math.min(duration, elapsedTime + deltaTime)
         }

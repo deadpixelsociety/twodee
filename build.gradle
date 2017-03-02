@@ -2,11 +2,10 @@ group 'com.thedeadpixelsociety.twodee'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.1.0-rc-91'
+    ext.kotlin_version = '1.1.0'
 
     repositories {
         mavenCentral()
-        maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
     }
 
     dependencies {
@@ -21,7 +20,6 @@ sourceCompatibility = 1.6
 
 repositories {
     mavenCentral()
-    maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
 }
 
 ext {

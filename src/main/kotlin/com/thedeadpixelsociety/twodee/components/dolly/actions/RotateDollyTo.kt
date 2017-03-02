@@ -26,7 +26,7 @@ class RotateDollyTo : DollyAction() {
 
         val a = elapsedTime / time
         val f = MathUtils.sin(a * MathUtils.PI * .5f)
-        Interpolation.linear.apply(transform.rotation, target, f)
+        transform.rotate(Interpolation.linear.apply(transform.angle, target, f))
         elapsedTime = Math.min(time, elapsedTime + deltaTime)
 
         return elapsedTime >= time
