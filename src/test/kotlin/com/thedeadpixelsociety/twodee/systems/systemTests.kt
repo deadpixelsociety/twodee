@@ -5,10 +5,12 @@ import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.backends.headless.HeadlessApplication
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.thedeadpixelsociety.twodee.components.*
-import com.thedeadpixelsociety.twodee.scripts.*
+import com.thedeadpixelsociety.twodee.scripts.Move
+import com.thedeadpixelsociety.twodee.scripts.MoveTo
+import com.thedeadpixelsociety.twodee.scripts.Rotate
+import com.thedeadpixelsociety.twodee.scripts.RotateTo
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -20,30 +22,6 @@ class SystemTests {
         const val GROUP3 = 0x04
     }
 
-    @Test
-    fun scriptSystem() {
-        val engine = Engine()
-        engine.addSystem(ScriptSystem())
-
-        val entity = Entity()
-        val tint = Tint().apply { color.set(Color.RED) }
-        entity.add(tint)
-        entity.add(Scripted().apply {
-            scripts.add(ChangeColor(Color.BLUE, 3f))
-        })
-
-        engine.addEntity(entity)
-
-        assertEquals(Color.RED, tint.color)
-
-        engine.update(1f)
-        engine.update(1f)
-        engine.update(.5f)
-        engine.update(.25f)
-        engine.update(.25f)
-
-        assertEquals(Color.BLUE, tint.color)
-    }
 
     @Test
     fun dollySystem() {
@@ -104,6 +82,9 @@ class SystemTests {
         engine.update(1f)
 
         assertEquals(180f, transform.angle)
+
+        assertEquals(10f, dolly.camera.position.x)
+        assertEquals(-8.742278E-8f, dolly.camera.up.x)
     }
 
     @Test
