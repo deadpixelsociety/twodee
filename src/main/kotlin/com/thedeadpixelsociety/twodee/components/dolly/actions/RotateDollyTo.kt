@@ -1,6 +1,5 @@
 package com.thedeadpixelsociety.twodee.components.dolly.actions
 
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.thedeadpixelsociety.twodee.components.Transform
@@ -17,18 +16,21 @@ class RotateDollyTo : DollyAction() {
     /**
      * The camera target rotation.
      */
-    val target = 0f
+    var target = 0f
 
     private var elapsedTime = 0f
 
-    override fun update(deltaTime: Float, camera: OrthographicCamera, transform: Transform): Boolean {
-        if (time <= 0 || elapsedTime >= time) return true
+    override fun update(deltaTime: Float, transform: Transform): Boolean {
+        if (time <= 0) return true
+        transform.angle = Interpolation.linear.apply(
+                transform.angle,
+                target,
+                MathUtils.sin((Math.min(time, elapsedTime) / time) * MathUtils.PI * .5f)
+        )
 
-        val a = elapsedTime / time
-        val f = MathUtils.sin(a * MathUtils.PI * .5f)
-        transform.rotate(Interpolation.linear.apply(transform.angle, target, f))
-        elapsedTime = Math.min(time, elapsedTime + deltaTime)
-
-        return elapsedTime >= time
+        elapsedTime += deltaTime
+        val finished = elapsedTime >= time
+        if (finished) transform.angle = target // ensure we're exactly at the target when we are done.
+        return finished
     }
 }

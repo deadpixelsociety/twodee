@@ -21,18 +21,10 @@ class Transform : PoolableComponent() {
      * The entity scale.
      */
     val scale = Vector2(1f, 1f)
+    /**
+     * The angle of rotation in degrees.
+     */
     var angle = 0f
-        get
-        set
-
-    var deltaAngle = 0f
-        get
-        private set
-
-    fun rotate(degrees: Float) {
-        deltaAngle = degrees
-        angle += degrees
-    }
 
     /**
      * The center of the entity as a sum of position and origin.
@@ -66,6 +58,5 @@ class Transform : PoolableComponent() {
         origin.set(0f, 0f)
         scale.set(1f, 1f)
         angle = 0f
-        deltaAngle = 0f
     }
 }

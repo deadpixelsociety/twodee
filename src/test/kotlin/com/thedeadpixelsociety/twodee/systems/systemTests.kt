@@ -6,16 +6,14 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.backends.headless.HeadlessApplication
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.math.Matrix4
-import com.badlogic.gdx.math.Quaternion
-import com.badlogic.gdx.math.Vector3
 import com.thedeadpixelsociety.twodee.components.Dolly
 import com.thedeadpixelsociety.twodee.components.GroupMask
 import com.thedeadpixelsociety.twodee.components.Tag
 import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.dolly.actions.PanDolly
+import com.thedeadpixelsociety.twodee.components.dolly.actions.PanDollyTo
 import com.thedeadpixelsociety.twodee.components.dolly.actions.RotateDolly
-import com.thedeadpixelsociety.twodee.toVector3
+import com.thedeadpixelsociety.twodee.components.dolly.actions.RotateDollyTo
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -61,14 +59,41 @@ class SystemTests {
         engine.update(.5f)
         assertEquals(.5f, transform.position.x)
         assertEquals(45f, transform.angle)
-        assertEquals(45f, transform.deltaAngle)
 
         engine.update(.5f)
         assertEquals(1f, transform.position.x)
         assertEquals(90f, transform.angle)
-        assertEquals(45f, transform.deltaAngle)
 
         assertTrue(dolly.actions.size == 0) // actions removed
+
+        transform.angle = 0f
+        transform.position.set(0f, 0f)
+
+        dolly.actions.add(PanDollyTo().apply {
+            target.set(10f, 0f)
+            time = 10f
+        })
+
+        for (i in 0..10) {
+            engine.update(1f)
+        }
+
+        engine.update(1f)
+
+        assertEquals(10f, transform.position.x)
+
+        dolly.actions.add(RotateDollyTo().apply {
+            target = 180f
+            time = 10f
+        })
+
+        for (i in 0..10) {
+            engine.update(1f)
+        }
+
+        engine.update(1f)
+
+        assertEquals(180f, transform.angle)
     }
 
     @Test

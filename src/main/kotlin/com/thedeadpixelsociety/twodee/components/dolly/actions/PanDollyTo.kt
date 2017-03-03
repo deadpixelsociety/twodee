@@ -1,6 +1,5 @@
 package com.thedeadpixelsociety.twodee.components.dolly.actions
 
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.thedeadpixelsociety.twodee.components.Transform
@@ -10,7 +9,7 @@ import com.thedeadpixelsociety.twodee.components.Transform
  */
 class PanDollyTo : DollyAction() {
     /**
-     * The amount of time it takes to traverse the distance to the target in seconds.
+     * The amount of time in seconds it takes to traverse the distance to the target.
      */
     var time = 1f
 
@@ -21,15 +20,13 @@ class PanDollyTo : DollyAction() {
 
     private var elapsedTime = 0f
 
-    override fun update(deltaTime: Float, camera: OrthographicCamera, transform: Transform): Boolean {
-        if (time <= 0f || elapsedTime >= time) return true
-
-        val a = elapsedTime / time
-        val f = MathUtils.sin(a * MathUtils.PI * .5f)
-        transform.position.lerp(target, f)
-        elapsedTime = Math.min(time, elapsedTime + deltaTime)
-
-        return elapsedTime >= time
+    override fun update(deltaTime: Float, transform: Transform): Boolean {
+        if (time <= 0f) return true
+        transform.position.lerp(target, MathUtils.sin((Math.min(time, elapsedTime) / time) * MathUtils.PI * .5f))
+        elapsedTime += deltaTime
+        val finished = elapsedTime >= time
+        if (finished) transform.position.set(target) // ensure we're exactly at the target when we are done.
+        return finished
     }
 
     override fun reset() {

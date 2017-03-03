@@ -1,12 +1,15 @@
 package com.thedeadpixelsociety.twodee.components.dolly.actions
 
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.thedeadpixelsociety.twodee.components.Transform
 
 /**
  * Rotates the dolly by a fixed amount per second.
  */
 class RotateDolly : DollyAction() {
+    companion object {
+        const val FOREVER = 0f
+    }
+
     /**
      * The amount to rotate the dolly per second.
      */
@@ -15,22 +18,21 @@ class RotateDolly : DollyAction() {
     /**
      * The amount of time to rotate in seconds. 0 = forever.
      */
-    var duration = 0f
+    var duration = FOREVER
 
     private var elapsedTime = 0f
 
-    override fun update(deltaTime: Float, camera: OrthographicCamera, transform: Transform): Boolean {
-        transform.rotate(amount * deltaTime)
-        if (duration > 0f) {
-            elapsedTime = Math.min(duration, elapsedTime + deltaTime)
-        }
-
-        return duration != 0f && elapsedTime >= duration
+    override fun update(deltaTime: Float, transform: Transform): Boolean {
+        if (duration < 0f) return true
+        transform.angle += amount * deltaTime
+        if (duration == FOREVER) return false
+        elapsedTime += deltaTime
+        return elapsedTime >= duration
     }
 
     override fun reset() {
         amount = 0f
-        duration = 0f
+        duration = FOREVER
         elapsedTime = 0f
     }
 }

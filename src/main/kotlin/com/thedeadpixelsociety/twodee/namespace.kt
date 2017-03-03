@@ -1,5 +1,6 @@
 package com.thedeadpixelsociety.twodee
 
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Disposable
@@ -63,3 +64,17 @@ fun <T : Vector2> T.toVector3(z: Float = 0f) = Vector3(x, y, z)
  * Converts a Vector3 into a Vector.
  */
 fun <T : Vector3> T.toVector2() = Vector2(x, y)
+
+/**
+ * Reset's an orthographi camera's up and direction vectors.
+ * @param yDown true if the y axis points down.
+ */
+fun <T : OrthographicCamera> T.reset(yDown: Boolean) {
+    if (yDown) {
+        up.set(0f, -1f, 0f)
+        direction.set(0f, 0f, 1f)
+    } else {
+        up.set(0f, 1f, 0f)
+        direction.set(0f, 0f, -1f)
+    }
+}
