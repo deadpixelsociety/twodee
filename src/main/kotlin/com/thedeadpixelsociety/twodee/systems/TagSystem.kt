@@ -1,10 +1,10 @@
 package com.thedeadpixelsociety.twodee.systems
 
-import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.gdx.utils.IntMap
 import com.thedeadpixelsociety.twodee.components.Tag
+import com.thedeadpixelsociety.twodee.components.mapper
 import java.lang.IllegalArgumentException
 
 /**
@@ -12,7 +12,7 @@ import java.lang.IllegalArgumentException
  */
 class TagSystem : ContainerSystem(Family.all(Tag::class.java).get()) {
     private val entityMap = IntMap<Entity>()
-    private val tagMapper = ComponentMapper.getFor(Tag::class.java)
+    private val tagMapper by mapper<Tag>()
 
     /**
      * Gets an entity with the specified tag ID.

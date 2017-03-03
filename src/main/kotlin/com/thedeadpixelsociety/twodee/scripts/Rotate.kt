@@ -1,13 +1,20 @@
-package com.thedeadpixelsociety.twodee.components.dolly.actions
+package com.thedeadpixelsociety.twodee.scripts
 
+import com.badlogic.ashley.core.Entity
 import com.thedeadpixelsociety.twodee.components.Transform
+import com.thedeadpixelsociety.twodee.components.mapper
 
 /**
- * Rotates the dolly by a fixed amount per second.
+ * Rotates the entity by a fixed amount per second.
  */
-class RotateDolly : DollyAction() {
+class Rotate() : Script() {
     companion object {
         const val FOREVER = 0f
+    }
+
+    constructor(amount: Float, duration: Float = FOREVER) : this() {
+        this.amount = amount;
+        this.duration = duration
     }
 
     /**
@@ -20,10 +27,12 @@ class RotateDolly : DollyAction() {
      */
     var duration = FOREVER
 
+    private val transformMapper by mapper<Transform>()
     private var elapsedTime = 0f
 
-    override fun update(deltaTime: Float, transform: Transform): Boolean {
+    override fun update(deltaTime: Float, entity: Entity): Boolean {
         if (duration < 0f) return true
+        val transform = transformMapper[entity] ?: return true
         transform.angle += amount * deltaTime
         if (duration == FOREVER) return false
         elapsedTime += deltaTime

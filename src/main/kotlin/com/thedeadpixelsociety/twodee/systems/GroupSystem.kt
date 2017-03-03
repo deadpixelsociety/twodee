@@ -1,11 +1,11 @@
 package com.thedeadpixelsociety.twodee.systems
 
-import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.IntMap
 import com.thedeadpixelsociety.twodee.components.GroupMask
+import com.thedeadpixelsociety.twodee.components.mapper
 import com.thedeadpixelsociety.twodee.gdxArray
 
 /**
@@ -13,7 +13,7 @@ import com.thedeadpixelsociety.twodee.gdxArray
  */
 class GroupSystem : ContainerSystem(Family.all(GroupMask::class.java).get()) {
     private val entityMap = IntMap<Array<Entity>>()
-    private val groupMapper = ComponentMapper.getFor(GroupMask::class.java)
+    private val groupMapper by mapper<GroupMask>()
 
     /**
      * Gets all entities with the specified group mask.

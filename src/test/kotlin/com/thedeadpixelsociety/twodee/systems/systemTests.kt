@@ -6,14 +6,11 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.backends.headless.HeadlessApplication
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.thedeadpixelsociety.twodee.components.Dolly
-import com.thedeadpixelsociety.twodee.components.GroupMask
-import com.thedeadpixelsociety.twodee.components.Tag
-import com.thedeadpixelsociety.twodee.components.Transform
-import com.thedeadpixelsociety.twodee.components.dolly.actions.PanDolly
-import com.thedeadpixelsociety.twodee.components.dolly.actions.PanDollyTo
-import com.thedeadpixelsociety.twodee.components.dolly.actions.RotateDolly
-import com.thedeadpixelsociety.twodee.components.dolly.actions.RotateDollyTo
+import com.thedeadpixelsociety.twodee.components.*
+import com.thedeadpixelsociety.twodee.scripts.Move
+import com.thedeadpixelsociety.twodee.scripts.MoveTo
+import com.thedeadpixelsociety.twodee.scripts.Rotate
+import com.thedeadpixelsociety.twodee.scripts.RotateTo
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -33,28 +30,24 @@ class SystemTests {
 
         val engine = Engine()
         val dollySystem = DollySystem()
+        engine.addSystem(ScriptSystem())
         engine.addSystem(dollySystem)
 
         val entity = Entity()
         val transform = Transform()
+        val scripted = Scripted()
         val dolly = Dolly(OrthographicCamera(100f, 100f).apply {
             setToOrtho(false)
         })
 
         entity.add(transform)
         entity.add(dolly)
+        entity.add(scripted)
 
         engine.addEntity(entity)
 
-        dolly.actions.add(PanDolly().apply {
-            amount.set(1f, 0f)
-            duration = 1f
-        })
-
-        dolly.actions.add(RotateDolly().apply {
-            amount = 90f
-            duration = 1f
-        })
+        scripted.scripts.add(Move(1f, 0f, 1f))
+        scripted.scripts.add(Rotate(90f, 1f))
 
         engine.update(.5f)
         assertEquals(.5f, transform.position.x)
@@ -64,15 +57,12 @@ class SystemTests {
         assertEquals(1f, transform.position.x)
         assertEquals(90f, transform.angle)
 
-        assertTrue(dolly.actions.size == 0) // actions removed
+        assertTrue(scripted.scripts.size == 0) // actions removed
 
         transform.angle = 0f
         transform.position.set(0f, 0f)
 
-        dolly.actions.add(PanDollyTo().apply {
-            target.set(10f, 0f)
-            time = 10f
-        })
+        scripted.scripts.add(MoveTo(10f, 0f, 10f))
 
         for (i in 0..10) {
             engine.update(1f)
@@ -82,10 +72,7 @@ class SystemTests {
 
         assertEquals(10f, transform.position.x)
 
-        dolly.actions.add(RotateDollyTo().apply {
-            target = 180f
-            time = 10f
-        })
+        scripted.scripts.add(RotateTo(180f, 10f))
 
         for (i in 0..10) {
             engine.update(1f)
