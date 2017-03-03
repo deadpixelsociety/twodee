@@ -32,8 +32,7 @@ class DollySystem : IteratingSystem(Family.all(Transform::class.java, Dolly::cla
                 Vector3(1f, 1f, 1f)
         )
 
-        dolly.camera.rotate(transform.deltaAngle)
-        dolly.camera.position.set(transform.position, 0f)
+        dolly.camera.transform(transformMatrix)
         dolly.camera.update()
     }
 
