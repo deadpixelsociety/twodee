@@ -1,5 +1,6 @@
 package com.thedeadpixelsociety.twodee.scripts
 
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.utils.Pool
 
@@ -27,7 +28,7 @@ abstract class Script : Pool.Poolable {
      * @param entity The entity being scripted.
      * @return true if the script has finished.
      */
-    abstract fun update(deltaTime: Float, entity: Entity): Boolean
+    abstract fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean
 
     override fun reset() {
         started = false

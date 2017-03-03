@@ -1,5 +1,7 @@
 package com.thedeadpixelsociety.twodee.assets
 
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.thedeadpixelsociety.twodee.Action
 

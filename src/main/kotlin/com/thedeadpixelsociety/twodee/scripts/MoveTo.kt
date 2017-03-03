@@ -1,5 +1,6 @@
 package com.thedeadpixelsociety.twodee.scripts
 
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
@@ -7,7 +8,7 @@ import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.mapper
 
 /**
- * Smoothly moves an entity to the target location.
+ * Smoothly moves an entity to the target location. Requires the Transform component.
  */
 class MoveTo() : Script() {
     constructor(x: Float, y: Float, time: Float = 1f) : this() {
@@ -28,7 +29,7 @@ class MoveTo() : Script() {
     private val transformMapper by mapper<Transform>()
     private var elapsedTime = 0f
 
-    override fun update(deltaTime: Float, entity: Entity): Boolean {
+    override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
         if (time <= 0f) return true
         val transform = transformMapper[entity] ?: return true
         transform.position.lerp(target, MathUtils.sin((Math.min(time, elapsedTime) / time) * MathUtils.PI * .5f))

@@ -1,5 +1,6 @@
 package com.thedeadpixelsociety.twodee.scripts
 
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
@@ -7,7 +8,7 @@ import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.mapper
 
 /**
- * Smoothly rotates the entity to a target rotation over a period of time.
+ * Smoothly rotates the entity to a target rotation over a period of time. Requires the Transform component.
  */
 class RotateTo() : Script() {
     constructor(target: Float, time: Float) : this() {
@@ -28,7 +29,7 @@ class RotateTo() : Script() {
     private val transformMapper by mapper<Transform>()
     private var elapsedTime = 0f
 
-    override fun update(deltaTime: Float, entity: Entity): Boolean {
+    override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
         if (time <= 0) return true
         val transform = transformMapper[entity] ?: return true
         transform.angle = Interpolation.linear.apply(

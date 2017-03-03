@@ -1,11 +1,12 @@
 package com.thedeadpixelsociety.twodee.scripts
 
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.mapper
 
 /**
- * Rotates the entity by a fixed amount per second.
+ * Rotates the entity by a fixed amount per second. Requires the Transform component.
  */
 class Rotate() : Script() {
     companion object {
@@ -30,7 +31,7 @@ class Rotate() : Script() {
     private val transformMapper by mapper<Transform>()
     private var elapsedTime = 0f
 
-    override fun update(deltaTime: Float, entity: Entity): Boolean {
+    override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
         if (duration < 0f) return true
         val transform = transformMapper[entity] ?: return true
         transform.angle += amount * deltaTime
