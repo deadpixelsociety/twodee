@@ -9,6 +9,7 @@ typealias Action<T> = (T) -> Unit
 typealias Func<T> = () -> T
 typealias Predicate<T> = (T) -> Boolean
 typealias Transform<T, R> = (T) -> R
+typealias Tween<T> = (T, T, Float) -> T
 
 /**
  * A helper function to create a libGDX array. This helps work around the name conflict between libGDX's Array<T> and
