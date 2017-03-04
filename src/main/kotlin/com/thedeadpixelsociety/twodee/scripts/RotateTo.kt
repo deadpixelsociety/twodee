@@ -2,6 +2,7 @@ package com.thedeadpixelsociety.twodee.scripts
 
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
+import com.badlogic.gdx.math.Interpolation
 import com.thedeadpixelsociety.twodee.Tween
 import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.mapper
@@ -12,7 +13,9 @@ import com.thedeadpixelsociety.twodee.components.mapper
 class RotateTo() : Script() {
     companion object {
         // Simple linear tween
-        val DEFAULT_TWEEN: Tween<Float> = { start, end, t -> (end - start) * t + start }
+        val DEFAULT_TWEEN: Tween<Float> = { start, end, t ->
+            Interpolation.linear.apply(start, end, t)
+        }
     }
 
     constructor(target: Float, time: Float, tween: Tween<Float> = DEFAULT_TWEEN) : this() {
