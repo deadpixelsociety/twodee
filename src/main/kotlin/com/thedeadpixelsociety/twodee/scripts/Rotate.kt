@@ -25,7 +25,7 @@ class Rotate() : Script() {
     var amount = 0f
 
     /**
-     * The amount of time to rotate in seconds. 0 = forever.
+     * The amount of time to rotate in seconds. -1 = infinite duration. 0 = rotate the full amount instantly.
      */
     var duration = INFINITE
 
@@ -33,7 +33,7 @@ class Rotate() : Script() {
     private var elapsedTime = 0f
 
     override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
-        if (duration < 0f) return true
+        if (duration < INFINITE) return true
 
         val transform = transformMapper[entity] ?: return true
         if (duration == INSTANT) {
