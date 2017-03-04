@@ -38,11 +38,17 @@ class RotateTo() : Script() {
 
     private val transformMapper by mapper<Transform>()
     private var elapsedTime = 0f
+    private var start = 0f
+
+    override fun start(engine: Engine, entity: Entity) {
+        val transform = transformMapper[entity] ?: return
+        start = transform.angle
+    }
 
     override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
         if (time <= 0) return true
         val transform = transformMapper[entity] ?: return true
-        transform.angle = tween.invoke(transform.angle, target, Math.min(elapsedTime, time) / time)
+        transform.angle = tween.invoke(start, target, Math.min(elapsedTime, time) / time)
         elapsedTime += deltaTime
         val finished = elapsedTime >= time
         if (finished) transform.angle = target // ensure we're exactly at the target when we are done.
@@ -53,5 +59,6 @@ class RotateTo() : Script() {
         time = 1f
         target = 0f
         elapsedTime = 0f
+        start = 0f
     }
 }

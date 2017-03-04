@@ -11,10 +11,11 @@ import com.thedeadpixelsociety.twodee.components.mapper
  */
 class Move() : Script() {
     companion object {
-        const val FOREVER = 0f
+        const val INFINITE = -1f
+        const val INSTANT = 0f
     }
 
-    constructor(x: Float, y: Float, duration: Float = FOREVER) : this() {
+    constructor(x: Float, y: Float, duration: Float = INFINITE) : this() {
         amount.set(x, y)
         this.duration = duration
     }
@@ -25,26 +26,32 @@ class Move() : Script() {
     val amount = Vector2()
 
     /**
-     * The total duration to move for. 0 = forever.
-     * @see FOREVER
+     * The total duration to move for. -1 = infinite duration. 0 = move the full amount instantly.
+     * @see INFINITE
      */
-    var duration = FOREVER
+    var duration = INFINITE
 
     private val transformMapper by mapper<Transform>()
     private var elapsedTime = 0f
 
     override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
-        if (duration < 0f) return true
+        if (duration < INFINITE) return true
+
         val transform = transformMapper[entity] ?: return true
+        if (duration == INSTANT) {
+            transform.position.add(amount.x, amount.y)
+            return true
+        }
+
         transform.position.add(amount.x * deltaTime, amount.y * deltaTime)
-        if (duration == FOREVER) return false
+        if (duration == INFINITE) return false
         elapsedTime += deltaTime
         return elapsedTime >= duration
     }
 
     override fun reset() {
         amount.set(0f, 0f)
-        duration = FOREVER
+        duration = INFINITE
         elapsedTime = 0f
     }
 }

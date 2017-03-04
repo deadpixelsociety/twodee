@@ -17,13 +17,13 @@ class ScriptSystem : IteratingSystem(Family.all(Scripted::class.java).get()) {
         val scripted = scriptedMapper[entity] ?: return
         scripted.scripts.toList().forEach {
             if (!it.started) {
-                it.start()
+                it.start(, )
                 it.started = true
             }
 
             if (it.update(deltaTime, engine, entity)) {
                 scripted.scripts.removeValue(it, true)
-                it.finish()
+                it.finish(, )
             }
         }
     }
