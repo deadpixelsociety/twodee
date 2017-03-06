@@ -2,6 +2,8 @@ package com.thedeadpixelsociety.twodee
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.ai.GdxAI
+import com.badlogic.gdx.ai.msg.MessageDispatcher
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -9,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.thedeadpixelsociety.twodee.scene.StackSceneController
 import com.thedeadpixelsociety.twodee.service.ServiceProviderRepository
 import com.thedeadpixelsociety.twodee.service.injectService
+import com.thedeadpixelsociety.twodee.service.service
 import com.thedeadpixelsociety.twodee.service.serviceSingleton
 
 /**
@@ -25,8 +28,13 @@ abstract class TwoDeeGame : ApplicationAdapter() {
         serviceSingleton(StackSceneController(Gdx.graphics.width, Gdx.graphics.height))
         serviceSingleton(SpriteBatch())
         serviceSingleton(ShapeRenderer())
+        serviceSingleton(MessageDispatcher())
 
-        tickEvent(repeat = TimeController.INFINITE) { sceneService.update(deltaTime()) }
+        tickEvent(repeat = TimeController.INFINITE) {
+            GdxAI.getTimepiece().update(TimeController.deltaTime)
+            sceneService.update(deltaTime())
+            service<MessageDispatcher>().update()
+        }
     }
 
     override fun pause() {
