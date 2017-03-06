@@ -7,9 +7,9 @@ import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.mapper
 
 /**
- * Moves an entity by a set amount per update. Requires the Transform component.
+ * Expands an entity's scale by a set amount per update. Requires the Transform component.
  */
-class Move() : Script() {
+class Scale() : Script() {
     companion object {
         const val INFINITE = -1f
         const val INSTANT = 0f
@@ -30,28 +30,27 @@ class Move() : Script() {
      * @see INFINITE
      */
     var duration = INFINITE
-
     private val transformMapper by mapper<Transform>()
     private var elapsedTime = 0f
 
     override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
-        if (duration < INFINITE) return true
+        if (duration < Scale.INFINITE) return true
 
         val transform = transformMapper[entity] ?: return true
-        if (duration == INSTANT) {
-            transform.position.add(amount.x, amount.y)
+        if (duration == Scale.INSTANT) {
+            transform.scale.add(amount)
             return true
         }
 
-        transform.position.add(amount.x * deltaTime, amount.y * deltaTime)
-        if (duration == INFINITE) return false
+        transform.scale.add(amount.x * deltaTime, amount.y * deltaTime)
+        if (duration == Move.INFINITE) return false
         elapsedTime += deltaTime
         return elapsedTime >= duration
     }
 
     override fun reset() {
         amount.set(0f, 0f)
-        duration = INFINITE
+        duration = Move.INFINITE
         elapsedTime = 0f
     }
 }

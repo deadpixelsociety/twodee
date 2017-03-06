@@ -12,19 +12,24 @@ abstract class Script : Pool.Poolable {
 
     /**
      * Called when the script is started.
+     * @param engine The entity engine.
+     * @param entity The entity being scripted.
      */
-    open fun start() {
+    open fun start(engine: Engine, entity: Entity) {
     }
 
     /**
      * Called when the script is finished.
+     * @param engine The entity engine.
+     * @param entity The entity being scripted.
      */
-    open fun finish() {
+    open fun finish(engine: Engine, entity: Entity) {
     }
 
     /**
      * Updates the script.
      * @param deltaTime The current delta time, in seconds.
+     * @param engine The entity engine.
      * @param entity The entity being scripted.
      * @return true if the script has finished.
      */

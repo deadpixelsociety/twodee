@@ -9,9 +9,9 @@ import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.mapper
 
 /**
- * Smoothly moves an entity to the target location. Requires the Transform component.
+ * Smoothly scales an entity to the target. Requires the Transform component.
  */
-class MoveTo() : Script() {
+class ScaleTo() : Script() {
     companion object {
         // Simple linear tween
         val DEFAULT_TWEEN: Tween<Vector2> = { start, end, t ->
@@ -48,13 +48,13 @@ class MoveTo() : Script() {
 
     override fun start(engine: Engine, entity: Entity) {
         val transform = transformMapper[entity] ?: return
-        start.set(transform.position)
+        start.set(transform.scale)
     }
 
     override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
         if (time <= 0f) return true
         val transform = transformMapper[entity] ?: return true
-        transform.position.set(tween.invoke(start, target, Math.min(elapsedTime, time) / time))
+        transform.scale.set(tween.invoke(start, target, Math.min(elapsedTime, time) / time))
         elapsedTime += deltaTime
         val finished = elapsedTime >= time
         if (finished) transform.position.set(target) // ensure we're exactly at the target when we are done.

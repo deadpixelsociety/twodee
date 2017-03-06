@@ -2,6 +2,7 @@ package com.thedeadpixelsociety.twodee.scripts
 
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
+import com.badlogic.gdx.math.Interpolation
 import com.thedeadpixelsociety.twodee.Tween
 import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.mapper
@@ -12,7 +13,9 @@ import com.thedeadpixelsociety.twodee.components.mapper
 class RotateTo() : Script() {
     companion object {
         // Simple linear tween
-        val DEFAULT_TWEEN: Tween<Float> = { start, end, t -> (end - start) * t + start }
+        val DEFAULT_TWEEN: Tween<Float> = { start, end, t ->
+            Interpolation.linear.apply(start, end, t)
+        }
     }
 
     constructor(target: Float, time: Float, tween: Tween<Float> = DEFAULT_TWEEN) : this() {
@@ -38,11 +41,17 @@ class RotateTo() : Script() {
 
     private val transformMapper by mapper<Transform>()
     private var elapsedTime = 0f
+    private var start = 0f
+
+    override fun start(engine: Engine, entity: Entity) {
+        val transform = transformMapper[entity] ?: return
+        start = transform.angle
+    }
 
     override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
         if (time <= 0) return true
         val transform = transformMapper[entity] ?: return true
-        transform.angle = tween.invoke(transform.angle, target, Math.min(elapsedTime, time) / time)
+        transform.angle = tween.invoke(start, target, Math.min(elapsedTime, time) / time)
         elapsedTime += deltaTime
         val finished = elapsedTime >= time
         if (finished) transform.angle = target // ensure we're exactly at the target when we are done.
@@ -53,5 +62,6 @@ class RotateTo() : Script() {
         time = 1f
         target = 0f
         elapsedTime = 0f
+        start = 0f
     }
 }

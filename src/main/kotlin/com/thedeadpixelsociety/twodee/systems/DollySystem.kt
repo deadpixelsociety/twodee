@@ -21,7 +21,7 @@ class DollySystem : IteratingSystem(Family.all(Transform::class.java, Dolly::cla
         val dolly = dollyMapper[entity] ?: return
 
         dolly.camera.reset(false)
-        dolly.camera.position.set(-(dolly.camera.viewportWidth * .5f), -(dolly.camera.viewportHeight * .5f), 0f)
+        //dolly.camera.position.set(-(dolly.camera.viewportWidth * .5f), -(dolly.camera.viewportHeight * .5f), 0f)
         dolly.camera.rotate(transform.angle)
         dolly.camera.position.set(transform.position, 0f)
         dolly.camera.update()
