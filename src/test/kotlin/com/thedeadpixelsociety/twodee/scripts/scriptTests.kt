@@ -21,8 +21,8 @@ class ScriptTests {
 
         entity.add(Scripted().apply {
             scripts.add(ChainScript().apply {
-                scripts.add(MoveTo(1f, 0f))
-                scripts.add(RotateTo(1f))
+                scripts.add(MoveTween(1f, 0f))
+                scripts.add(RotateTween(1f))
             })
         })
 
@@ -69,7 +69,7 @@ class ScriptTests {
         val tint = Tint().apply { color.set(Color.RED) }
         entity.add(tint)
         entity.add(Scripted().apply {
-            scripts.add(ColorTo(Color.RED, Color.BLUE, 3f))
+            scripts.add(ColorTween(Color.RED, Color.BLUE, 3f))
         })
 
         engine.addEntity(entity)
@@ -136,7 +136,7 @@ class ScriptTests {
         val transform = Transform()
         entity.add(transform)
         entity.add(Scripted().apply {
-            scripts.add(MoveTo(10f, 0f, 2f))
+            scripts.add(MoveTween(10f, 0f, 2f))
         })
 
         engine.addEntity(entity)
@@ -200,7 +200,7 @@ class ScriptTests {
         val transform = Transform()
         entity.add(transform)
         entity.add(Scripted().apply {
-            scripts.add(RotateTo(10f, 2f))
+            scripts.add(RotateTween(10f, 2f))
         })
 
         engine.addEntity(entity)

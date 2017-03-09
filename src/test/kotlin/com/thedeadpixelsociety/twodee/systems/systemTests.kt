@@ -8,9 +8,9 @@ import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.thedeadpixelsociety.twodee.components.*
 import com.thedeadpixelsociety.twodee.scripts.Move
-import com.thedeadpixelsociety.twodee.scripts.MoveTo
+import com.thedeadpixelsociety.twodee.scripts.MoveTween
 import com.thedeadpixelsociety.twodee.scripts.Rotate
-import com.thedeadpixelsociety.twodee.scripts.RotateTo
+import com.thedeadpixelsociety.twodee.scripts.RotateTween
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -63,7 +63,7 @@ class SystemTests {
         transform.angle = 0f
         transform.position.set(0f, 0f)
 
-        scripted.scripts.add(MoveTo(10f, 0f, 10f))
+        scripted.scripts.add(MoveTween(10f, 0f, 10f))
 
         for (i in 0..10) {
             engine.update(1f)
@@ -73,7 +73,7 @@ class SystemTests {
 
         assertEquals(10f, transform.position.x)
 
-        scripted.scripts.add(RotateTo(180f, 10f))
+        scripted.scripts.add(RotateTween(180f, 10f))
 
         for (i in 0..10) {
             engine.update(1f)

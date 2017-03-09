@@ -10,7 +10,7 @@ import com.thedeadpixelsociety.twodee.components.mapper
 /**
  * Script to change the color of an entity over duration. Requires the Tint component.
  */
-class ColorTo() : TweenScript<Color>() {
+class ColorTween() : TweenScript<Color>() {
     companion object {
         val DEFAULT_TWEEN: Tween<Color> = { start, end, t -> c0.set(start).lerp(end, t) }
         private val c0 = Color(Color.WHITE)

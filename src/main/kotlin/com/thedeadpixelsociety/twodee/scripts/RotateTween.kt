@@ -10,7 +10,7 @@ import com.thedeadpixelsociety.twodee.components.mapper
 /**
  * Smoothly rotates the entity to a end rotation over a period of duration. Requires the Transform component.
  */
-class RotateTo() : TweenScript<Float>() {
+class RotateTween() : TweenScript<Float>() {
     companion object {
         // Simple linear tween
         val DEFAULT_TWEEN: Tween<Float> = { start, end, t ->

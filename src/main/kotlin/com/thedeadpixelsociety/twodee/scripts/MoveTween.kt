@@ -9,9 +9,9 @@ import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.mapper
 
 /**
- * Smoothly scales an entity to the end. Requires the Transform component.
+ * Smoothly moves an entity to the end location. Requires the Transform component.
  */
-class ScaleTo() : TweenScript<Vector2>() {
+class MoveTween() : TweenScript<Vector2>() {
     companion object {
         // Simple linear tween
         val DEFAULT_TWEEN: Tween<Vector2> = { start, end, t ->
@@ -26,24 +26,25 @@ class ScaleTo() : TweenScript<Vector2>() {
     }
 
     constructor(x: Float, y: Float, duration: Float = Duration.INSTANT, tween: Tween<Vector2> = DEFAULT_TWEEN) : this() {
-        end.set(x, y)
+        this.end.set(x, y)
         this.duration = duration
         this.tween = tween
     }
 
     override var start = Vector2()
+
     override var end = Vector2()
 
     private val transformMapper by mapper<Transform>()
 
     override fun start(engine: Engine, entity: Entity) {
         val transform = transformMapper[entity] ?: return
-        start.set(transform.scale)
+        start.set(transform.position)
     }
 
     override fun updateValue(engine: Engine, entity: Entity, value: Vector2) {
         val transform = transformMapper[entity] ?: return
-        transform.scale.set(value)
+        transform.position.set(value)
     }
 
     override fun reset() {
