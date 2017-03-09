@@ -8,9 +8,9 @@ import com.thedeadpixelsociety.twodee.components.Transform
 import com.thedeadpixelsociety.twodee.components.mapper
 
 /**
- * Smoothly rotates the entity to a target rotation over a period of time. Requires the Transform component.
+ * Smoothly rotates the entity to a end rotation over a period of duration. Requires the Transform component.
  */
-class RotateTo() : Script() {
+class RotateTo() : TweenScript<Float>() {
     companion object {
         // Simple linear tween
         val DEFAULT_TWEEN: Tween<Float> = { start, end, t ->
@@ -18,50 +18,36 @@ class RotateTo() : Script() {
         }
     }
 
-    constructor(target: Float, time: Float = 1f, tween: Tween<Float> = DEFAULT_TWEEN) : this() {
-        this.target = target
-        this.time = time
+    init {
+        tween = DEFAULT_TWEEN
+    }
+
+    constructor(end: Float, duration: Float = Duration.INSTANT, tween: Tween<Float> = DEFAULT_TWEEN) : this() {
+        this.end = end
+        this.duration = duration
         this.tween = tween
     }
 
-    /**
-     * The amount of time it takes to rotate to the target in seconds.
-     */
-    var time = 1f
+    override var start = 0f
 
-    /**
-     * The camera target rotation.
-     */
-    var target = 0f
-
-    /**
-     * An optional tweening function used to control how the transition happens.
-     */
-    var tween = DEFAULT_TWEEN
+    override var end = 0f
 
     private val transformMapper by mapper<Transform>()
-    private var elapsedTime = 0f
-    private var start = 0f
 
     override fun start(engine: Engine, entity: Entity) {
         val transform = transformMapper[entity] ?: return
         start = transform.angle
     }
 
-    override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
-        if (time <= 0) return true
-        val transform = transformMapper[entity] ?: return true
-        transform.angle = tween.invoke(start, target, Math.min(elapsedTime, time) / time)
-        elapsedTime += deltaTime
-        val finished = elapsedTime >= time
-        if (finished) transform.angle = target // ensure we're exactly at the target when we are done.
-        return finished
+    override fun updateValue(engine: Engine, entity: Entity, value: Float) {
+        val transform = transformMapper[entity] ?: return
+        transform.angle = value
     }
 
     override fun reset() {
-        time = 1f
-        target = 0f
-        elapsedTime = 0f
+        super.reset()
         start = 0f
+        end = 0f
+        tween = DEFAULT_TWEEN
     }
 }

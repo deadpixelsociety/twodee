@@ -28,7 +28,7 @@ abstract class Script : Pool.Poolable {
 
     /**
      * Updates the script.
-     * @param deltaTime The current delta time, in seconds.
+     * @param deltaTime The current delta duration, in seconds.
      * @param engine The entity engine.
      * @param entity The entity being scripted.
      * @return true if the script has finished.

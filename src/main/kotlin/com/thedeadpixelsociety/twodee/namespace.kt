@@ -22,12 +22,12 @@ typealias Tween<T> = (T, T, Float) -> T
 fun <T> gdxArray() = com.badlogic.gdx.utils.Array<T>()
 
 /**
- * A helper function to return the current update delta time, in seconds.
+ * A helper function to return the current update delta duration, in seconds.
  */
 fun deltaTime() = TimeController.deltaTime
 
 /**
- * A helper function to return the total accumulated time, in seconds.
+ * A helper function to return the total accumulated duration, in seconds.
  */
 fun totalTime() = TimeController.totalTime
 

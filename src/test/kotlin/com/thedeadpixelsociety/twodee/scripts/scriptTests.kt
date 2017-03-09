@@ -69,7 +69,7 @@ class ScriptTests {
         val tint = Tint().apply { color.set(Color.RED) }
         entity.add(tint)
         entity.add(Scripted().apply {
-            scripts.add(ChangeColor(Color.BLUE, 3f))
+            scripts.add(ColorTo(Color.RED, Color.BLUE, 3f))
         })
 
         engine.addEntity(entity)

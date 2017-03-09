@@ -1,7 +1,7 @@
 package com.thedeadpixelsociety.twodee
 
 /**
- * Controller for global time keeping. Tracks the current update delta time and the accumulated total time. This
+ * Controller for global duration keeping. Tracks the current update delta duration and the accumulated total duration. This
  * controller also accepts tick events that can be triggered at intervals and repeated.
  * @see TickEvent
  */
@@ -16,21 +16,21 @@ object TimeController {
     private val removeEventQueue = gdxArray<TickEvent>()
 
     /**
-     * The current update delta time, in seconds.
+     * The current update delta duration, in seconds.
      */
     var deltaTime = 0f
         get
         private set
 
     /**
-     * The total accumulated time, in seconds.
+     * The total accumulated duration, in seconds.
      */
     var totalTime = 0f
         get
         private set
 
     /**
-     * Resets the delta time, total time and clears all tick events.
+     * Resets the delta duration, total duration and clears all tick events.
      */
     fun reset() {
         deltaTime = 0f
@@ -39,8 +39,8 @@ object TimeController {
     }
 
     /**
-     * Updates the controller with the current delta time.
-     * @param deltaTime The current delta time, in seconds.
+     * Updates the controller with the current delta duration.
+     * @param deltaTime The current delta duration, in seconds.
      */
     fun update(deltaTime: Float) {
         addEventQueue.forEach { events.add(it) }
