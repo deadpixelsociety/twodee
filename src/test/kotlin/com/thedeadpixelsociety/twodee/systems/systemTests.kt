@@ -16,7 +16,7 @@ import org.junit.Test
 
 class SystemTests {
     companion object {
-        const val PLAYER = 1
+        const val PLAYER = "player"
         const val GROUP1 = 0x01
         const val GROUP2 = 0x02
         const val GROUP3 = 0x04

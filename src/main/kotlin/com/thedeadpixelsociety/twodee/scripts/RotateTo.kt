@@ -18,7 +18,7 @@ class RotateTo() : Script() {
         }
     }
 
-    constructor(target: Float, time: Float, tween: Tween<Float> = DEFAULT_TWEEN) : this() {
+    constructor(target: Float, time: Float = 1f, tween: Tween<Float> = DEFAULT_TWEEN) : this() {
         this.target = target
         this.time = time
         this.tween = tween

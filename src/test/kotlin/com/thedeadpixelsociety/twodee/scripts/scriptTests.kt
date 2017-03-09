@@ -12,6 +12,55 @@ import org.junit.Test
 
 class ScriptTests {
     @Test
+    fun chainScriptMovesThenRotates() {
+        val engine = Engine()
+        engine.addSystem(ScriptSystem())
+        val entity = Entity()
+        val transform = Transform()
+        entity.add(transform)
+
+        entity.add(Scripted().apply {
+            scripts.add(ChainScript().apply {
+                scripts.add(MoveTo(1f, 0f))
+                scripts.add(RotateTo(1f))
+            })
+        })
+
+        engine.addEntity(entity)
+        Assert.assertEquals(0f, transform.position.x)
+        Assert.assertEquals(0f, transform.angle)
+        engine.update(1f)
+        Assert.assertEquals(1f, transform.position.x)
+        Assert.assertEquals(0f, transform.angle)
+        engine.update(1f)
+        Assert.assertEquals(1f, transform.position.x)
+        Assert.assertEquals(1f, transform.angle)
+    }
+
+    @Test
+    fun compositeScriptMovesAndRotates() {
+        val engine = Engine()
+        engine.addSystem(ScriptSystem())
+        val entity = Entity()
+        val transform = Transform()
+        entity.add(transform)
+
+        entity.add(Scripted().apply {
+            scripts.add(CompositeScript().apply {
+                scripts.add(Move(1f, 0f))
+                scripts.add(Rotate(1f))
+            })
+        })
+
+        engine.addEntity(entity)
+        Assert.assertEquals(0f, transform.position.x)
+        Assert.assertEquals(0f, transform.angle)
+        engine.update(1f)
+        Assert.assertEquals(1f, transform.position.x)
+        Assert.assertEquals(1f, transform.angle)
+    }
+
+    @Test
     fun changeColorFromRedToBlue() {
         val engine = Engine()
         engine.addSystem(ScriptSystem())

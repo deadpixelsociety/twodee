@@ -24,7 +24,7 @@ open class CompositeScript : Script() {
 
     override fun update(deltaTime: Float, engine: Engine, entity: Entity): Boolean {
         scripts.toList().forEach {
-            if (update(deltaTime, engine, entity)) {
+            if (it.update(deltaTime, engine, entity)) {
                 scripts.removeValue(it, true)
                 it.finish(engine, entity)
             }
