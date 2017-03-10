@@ -22,13 +22,14 @@ class SystemTests {
         const val GROUP3 = 0x04
     }
 
-
-    @Test
-    fun dollySystem() {
+    init {
         HeadlessApplication(object : ApplicationAdapter() {
 
         }, HeadlessApplicationConfiguration())
+    }
 
+    @Test
+    fun dollySystem() {
         val engine = Engine()
         val dollySystem = DollySystem()
         engine.addSystem(ScriptSystem())
