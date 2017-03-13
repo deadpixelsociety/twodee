@@ -1,54 +1,58 @@
 package com.thedeadpixelsociety.twodee.input
 
+import com.thedeadpixelsociety.twodee.Predicate
+
 typealias ActionListener<T> = (T, Boolean) -> Unit
 
 /**
  * Maps actions to input keys and buttons.
  * @param T The action type. Usually an enum but strings or ints would work as well.
  */
-interface ActionController<T> {
+abstract class ActionController<T> {
     /**
      * Maps the specified action to the specified key.
      * @param action The action to map.
      * @param key The key to map the action to.
+     * @param predicate An optional predicate that must return true for the action to be 'down'.
      */
-    fun mapKey(action: T, key: Int)
+    abstract fun mapKey(action: T, key: Int, predicate: Predicate<T>? = null)
 
     /**
      * Maps the specified action to the specified button.
      * @param action The action to map.
      * @param button The button to map the action to.
+     * @param predicate An optional predicate that must return true for the action to be 'down'.
      */
-    fun mapButton(action: T, button: Int)
+    abstract fun mapButton(action: T, button: Int, predicate: Predicate<T>? = null)
 
     /**
      * Checks if the specified action is in a down (pressed) state.
      * @param action The action to check.
      * @return true if the action is down.
      */
-    fun actionDown(action: T): Boolean
+    abstract fun actionDown(action: T): Boolean
 
     /**
      * Checks if the specified action is in an up (unpressed) state.
      * @param action The action to check.
      * @return true if the action is up.
      */
-    fun actionUp(action: T): Boolean
+    abstract fun actionUp(action: T): Boolean
 
     /**
      * Updates the mapper so that action events can be fired.
      */
-    fun update()
+    abstract fun update()
 
     /**
      * Adds the specified action listener.
      * @param listener The listener.
      */
-    fun addListener(listener: ActionListener<T>)
+    abstract fun addListener(listener: ActionListener<T>)
 
     /**
      * Removes the specified action listener.
      * @param listener The listener.
      */
-    fun removeListener(listener: ActionListener<T>)
+    abstract fun removeListener(listener: ActionListener<T>)
 }

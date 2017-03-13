@@ -3,33 +3,48 @@ package com.thedeadpixelsociety.twodee.input
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.IntMap
 import com.badlogic.gdx.utils.ObjectMap
+import com.thedeadpixelsociety.twodee.Predicate
 import com.thedeadpixelsociety.twodee.gdxArray
 
-class DefaultActionController<T> : ActionController<T> {
+class DefaultActionController<T> : ActionController<T>() {
     private val keyMap = IntMap<T>()
     private val buttonMap = IntMap<T>()
+    private val stateMap = ObjectMap<T, Boolean>()
+    private val predicateMap = ObjectMap<T, Predicate<T>>()
     private val listeners = gdxArray<ActionListener<T>>()
-    private val actionStateMap = ObjectMap<T, Boolean>()
 
-    override fun mapKey(action: T, key: Int) {
-        val existingKey = keyMap.findKey(action, false, -1)
-        if (existingKey != -1) keyMap.remove(existingKey)
+    override fun mapKey(action: T, key: Int, predicate: Predicate<T>?) {
+        val existing = keyMap.findKey(action, false, -1)
+        if (existing != -1) {
+            keyMap.remove(key)
+            stateMap.remove(action)
+            predicateMap.remove(action)
+        }
+
         keyMap.put(key, action)
-        actionStateMap.put(action, false)
+        stateMap.put(action, false)
+        if (predicate != null) predicateMap.put(action, predicate)
     }
 
-    override fun mapButton(action: T, button: Int) {
-        val existingKey = buttonMap.findKey(action, false, -1)
-        if (existingKey != -1) buttonMap.remove(existingKey)
+    override fun mapButton(action: T, button: Int, predicate: Predicate<T>?) {
+        val existing = buttonMap.findKey(action, false, -1)
+        if (existing != -1) {
+            buttonMap.remove(button)
+            stateMap.remove(action)
+            predicateMap.remove(action)
+        }
+
         buttonMap.put(button, action)
-        actionStateMap.put(action, false)
+        stateMap.put(action, false)
+        if (predicate != null) predicateMap.put(action, predicate)
     }
 
     override fun actionDown(action: T): Boolean {
+        val predicate = predicateMap.get(action, null)
         val key = keyMap.findKey(action, false, -1)
-        if (key != -1) return Gdx.input.isKeyPressed(key)
+        if (key != -1) return Gdx.input.isKeyPressed(key) && predicate?.invoke(action) ?: true
         val button = buttonMap.findKey(action, false, -1)
-        if (button != -1) return Gdx.input.isButtonPressed(button)
+        if (button != -1) return Gdx.input.isButtonPressed(button) && predicate?.invoke(action) ?: true
         return false
     }
 
@@ -38,13 +53,13 @@ class DefaultActionController<T> : ActionController<T> {
     }
 
     override fun update() {
-        actionStateMap.forEach {
+        stateMap.forEach {
             val action = it.key
             val lastState = it.value
             val state = actionDown(action)
             if (state != lastState) {
                 listeners.forEach { it.invoke(action, state) }
-                actionStateMap.put(action, state)
+                stateMap.put(action, state)
             }
         }
     }
