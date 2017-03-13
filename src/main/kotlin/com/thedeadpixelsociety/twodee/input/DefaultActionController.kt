@@ -9,6 +9,7 @@ import com.thedeadpixelsociety.twodee.gdxArray
 class DefaultActionController<T> : ActionController<T>() {
     private val keyMap = IntMap<T>()
     private val buttonMap = IntMap<T>()
+    private val touchMap = IntMap<T>()
     private val stateMap = ObjectMap<T, Boolean>()
     private val predicateMap = ObjectMap<T, Predicate<T>>()
     private val listeners = gdxArray<ActionListener<T>>()
@@ -39,12 +40,27 @@ class DefaultActionController<T> : ActionController<T>() {
         if (predicate != null) predicateMap.put(action, predicate)
     }
 
+    override fun mapTouch(action: T, pointer: Int, predicate: Predicate<T>?) {
+        val existing = touchMap.findKey(action, false, -1)
+        if (existing != -1) {
+            touchMap.remove(pointer)
+            stateMap.remove(action)
+            predicateMap.remove(action)
+        }
+
+        touchMap.put(pointer, action)
+        stateMap.put(action, false)
+        if (predicate != null) predicateMap.put(action, predicate)
+    }
+
     override fun actionDown(action: T): Boolean {
         val predicate = predicateMap.get(action, null)
         val key = keyMap.findKey(action, false, -1)
         if (key != -1) return Gdx.input.isKeyPressed(key) && predicate?.invoke(action) ?: true
         val button = buttonMap.findKey(action, false, -1)
         if (button != -1) return Gdx.input.isButtonPressed(button) && predicate?.invoke(action) ?: true
+        val pointer = touchMap.findKey(action, false, -1)
+        if (pointer != -1) return Gdx.input.isTouched(pointer) && predicate?.invoke(action) ?: true
         return false
     }
 

@@ -26,6 +26,14 @@ abstract class ActionController<T> {
     abstract fun mapButton(action: T, button: Int, predicate: Predicate<T>? = null)
 
     /**
+     * Maps the specified action to the specified pointer touch.
+     * @param action The action to map.
+     * @param pointer The pointer to map the action to.
+     * @param predicate An optional predicate that must return true for the action to be 'down'.
+     */
+    abstract fun mapTouch(action: T, pointer: Int, predicate: Predicate<T>? = null)
+
+    /**
      * Checks if the specified action is in a down (pressed) state.
      * @param action The action to check.
      * @return true if the action is down.
