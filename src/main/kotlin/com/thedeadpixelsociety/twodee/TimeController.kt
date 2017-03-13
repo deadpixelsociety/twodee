@@ -78,25 +78,46 @@ object TimeController {
 
     private fun runEvents() {
         events.toList().forEach {
-            if (it.interval == 0f || it.lastTime == 0f || (totalTime - it.lastTime) >= it.interval) {
-                it.func()
-                it.lastTime = totalTime
-                it.count++
-            }
+            if (it.cancel) {
+                events.removeValue(it, true)
+            } else {
+                if (it.delayExpired() && it.intervalReady()) {
+                    it.func()
+                    it.lastTime = totalTime
+                    it.count++
+                }
 
-            if (it.repeat != INFINITE && it.count > it.repeat) events.removeValue(it, true)
+                if (!it.delayExpired()) it.delayTimer += deltaTime
+                if (it.expired()) events.removeValue(it, true)
+            }
         }
     }
 
     /**
      * An event that will be fired at each tick up to [repeat] number of times. At each tick [func] will be
      * invoked. At least one invocation of [func] will always occur.
+     * @param delay The initial delay before the event happens.
      * @param interval The interval between ticks.
      * @param repeat The number of times to repeat the event after the first invocation.
      * @param func The function to perform at each tick.
      */
-    open class TickEvent(val interval: Float, val repeat: Int, val func: Func<Unit>) {
+    open class TickEvent(
+            val delay: Float = 0f,
+            val interval: Float = 0f,
+            val repeat: Int = 0,
+            val func: Func<Unit>
+    ) {
+        /**
+         * Cancels the event if true.
+         */
+        var cancel = false
+
+        internal var delayTimer = 0f
         internal var lastTime = 0f
         internal var count = 0
+
+        internal fun delayExpired() = delayTimer >= delay
+        internal fun intervalReady() = lastTime == 0f || (totalTime() - lastTime) >= interval
+        internal fun expired() = repeat != INFINITE && delayExpired() && count > repeat
     }
 }

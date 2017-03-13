@@ -33,14 +33,18 @@ fun totalTime() = TimeController.totalTime
 
 /**
  * A helper function to create a tick event.
+ * @param delay The initial delay before the event happens.
  * @param interval The interval between ticks. Defaults to zero.
  * @param repeat The number of times to repeat the event after the first invocation. Defaults to zero.
  * @param func The function to perform at each tick.
  * @see TimeController
  * @see TimeController.TickEvent
+ * @return The created tick event.
  */
-fun tickEvent(interval: Float = 0f, repeat: Int = 0, func: Func<Unit>) {
-    TimeController.register(TimeController.TickEvent(interval, repeat, func))
+fun tickEvent(delay: Float = 0f, interval: Float = 0f, repeat: Int = 0, func: Func<Unit>): TimeController.TickEvent {
+    val event = TimeController.TickEvent(delay, interval, repeat, func)
+    TimeController.register(event)
+    return event
 }
 
 /**
@@ -60,15 +64,23 @@ fun <T : Disposable> T.using(action: Action<T>) {
  * Converts a Vector2 into a Vector3 with zero as it's z value by default.
  * @param z The z value to use.
  */
-fun <T : Vector2> T.toVector3(z: Float = 0f) = Vector3(x, y, z)
+fun Vector2.toVector3(z: Float = 0f) = Vector3(x, y, z)
 
 /**
  * Converts a Vector3 into a Vector.
  */
-fun <T : Vector3> T.toVector2() = Vector2(x, y)
+fun Vector3.toVector2() = Vector2(x, y)
 
 /**
- * Reset's an orthographi camera's up and direction vectors.
+ * Returns a new vector containing only the largest component.
+ */
+fun Vector2.withLargestComponent(): Vector2 {
+    val xl = Math.abs(x) >= Math.abs(y)
+    return Vector2(if (xl) x else 0f, if (xl) 0f else y)
+}
+
+/**
+ * Reset's an orthographic camera's up and direction vectors.
  * @param yDown true if the y axis points down.
  */
 fun <T : OrthographicCamera> T.reset(yDown: Boolean) {

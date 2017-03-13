@@ -1,7 +1,7 @@
 package com.thedeadpixelsociety.twodee
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.Assert.*
 
 class TimeTests {
     @Test
@@ -33,7 +33,7 @@ class TimeTests {
 
         var ticked = false
 
-        tickEvent(3f, 1) {
+        tickEvent(interval = 3f, repeat = 1) {
             ticked = !ticked
         }
 
@@ -44,12 +44,29 @@ class TimeTests {
     }
 
     @Test
+    fun tickAfterDelay() {
+        TimeController.reset()
+
+        var ticked = false
+        tickEvent(TimeController.STEP * 2) {
+            ticked = true
+        }
+
+        TimeController.update(TimeController.STEP)
+        assertEquals(false, ticked)
+        TimeController.update(TimeController.STEP)
+        TimeController.update(TimeController.STEP)
+        TimeController.update(TimeController.STEP)
+        assertEquals(true, ticked)
+    }
+
+    @Test
     fun tickEventRepeats() {
         TimeController.reset()
 
         var ticked = false
 
-        tickEvent(0f, 2) {
+        tickEvent(interval = 0f, repeat = 2) {
             ticked = !ticked
         }
 
