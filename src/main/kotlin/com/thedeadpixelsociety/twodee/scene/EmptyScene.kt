@@ -27,7 +27,7 @@ abstract class EmptyScene : Scene {
     override fun update(deltaTime: Float) {
     }
 
-    override fun render(deltaTime: Float) {
+    override fun render() {
     }
 
     override fun dispose() {

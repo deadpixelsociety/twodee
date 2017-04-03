@@ -53,7 +53,6 @@ interface Scene : Disposable {
 
     /**
      * Called when the scene should be rendered.
-     * @param deltaTime The time elapsed since the last render, in seconds.
      */
-    fun render(deltaTime: Float)
+    fun render()
 }

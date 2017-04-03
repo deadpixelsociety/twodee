@@ -6,12 +6,9 @@ package com.thedeadpixelsociety.twodee
  * @see TickEvent
  */
 object TimeController {
-    const val MAX_DELTA_TIME = .01666666666666666666666666666667f
-    const val STEP = .01f
     const val INFINITE = -1
 
     private val events = gdxArray<TickEvent>()
-    private var accumulator = 0f
     private val addEventQueue = gdxArray<TickEvent>()
     private val removeEventQueue = gdxArray<TickEvent>()
 
@@ -49,14 +46,10 @@ object TimeController {
         addEventQueue.clear()
         removeEventQueue.clear()
 
-        accumulator += Math.min(MAX_DELTA_TIME, deltaTime)
-        while (accumulator >= STEP) {
-            runEvents()
+        runEvents()
 
-            this.deltaTime = STEP
-            this.totalTime += STEP
-            accumulator -= STEP
-        }
+        this.deltaTime = deltaTime
+        totalTime += deltaTime
     }
 
     /**

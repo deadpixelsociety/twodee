@@ -54,8 +54,8 @@ class StackSceneController(private var width: Int, private var height: Int) : Sc
         }
     }
 
-    override fun render(deltaTime: Float) {
-        scenes().forEach { it.render(deltaTime) }
+    override fun render() {
+        scenes().forEach(Scene::render)
     }
 
     override fun dispose() {

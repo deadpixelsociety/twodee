@@ -49,7 +49,6 @@ interface SceneController : Disposable {
 
     /**
      * Render all scenes in this controller.
-     * @param deltaTime The time elapsed since the last update, in seconds.
      */
-    fun render(deltaTime: Float)
+    fun render()
 }
