@@ -29,12 +29,6 @@ abstract class TwoDeeGame : ApplicationAdapter() {
         serviceSingleton(SpriteBatch())
         serviceSingleton(ShapeRenderer())
         serviceSingleton(MessageDispatcher())
-
-        tickEvent(repeat = TimeController.INFINITE) {
-            GdxAI.getTimepiece().update(TimeController.deltaTime)
-            sceneService.update(deltaTime())
-            service<MessageDispatcher>().update()
-        }
     }
 
     override fun pause() {
@@ -53,8 +47,10 @@ abstract class TwoDeeGame : ApplicationAdapter() {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        TimeController.update(Gdx.graphics.deltaTime)
-        sceneService.render(deltaTime())
+        GdxAI.getTimepiece().update(TimeController.deltaTime)
+        sceneService.update(deltaTime())
+        service<MessageDispatcher>().update()
+        sceneService.render()
     }
 
     override fun dispose() {

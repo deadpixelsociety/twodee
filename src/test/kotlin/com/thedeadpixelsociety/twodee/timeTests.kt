@@ -4,15 +4,19 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class TimeTests {
+    companion object {
+        const val STEP = 1f / 60f
+    }
+
     @Test
     fun timeIncrements() {
         TimeController.reset()
-        TimeController.update(TimeController.STEP)
-        assertEquals(TimeController.STEP, TimeController.deltaTime)
-        assertEquals(TimeController.STEP, TimeController.totalTime)
-        TimeController.update(TimeController.STEP)
-        assertEquals(TimeController.STEP, TimeController.deltaTime)
-        assertEquals(TimeController.STEP * 2f, TimeController.totalTime)
+        TimeController.update(STEP)
+        assertEquals(STEP, TimeController.deltaTime)
+        assertEquals(STEP, TimeController.totalTime)
+        TimeController.update(STEP)
+        assertEquals(STEP, TimeController.deltaTime)
+        assertEquals(STEP * 2f, TimeController.totalTime)
     }
 
     @Test
@@ -23,7 +27,7 @@ class TimeTests {
 
         tickEvent { ticked = !ticked }
 
-        TimeController.update(TimeController.STEP)
+        TimeController.update(STEP)
         assertEquals(true, ticked)
     }
 
@@ -37,7 +41,7 @@ class TimeTests {
             ticked = !ticked
         }
 
-        TimeController.update(TimeController.STEP)
+        TimeController.update(STEP)
         assertEquals(true, ticked)
         TimeController.update(3f)
         assertEquals(false, ticked)
@@ -48,15 +52,15 @@ class TimeTests {
         TimeController.reset()
 
         var ticked = false
-        tickEvent(TimeController.STEP * 2) {
+        tickEvent(STEP * 2) {
             ticked = true
         }
 
-        TimeController.update(TimeController.STEP)
+        TimeController.update(STEP)
         assertEquals(false, ticked)
-        TimeController.update(TimeController.STEP)
-        TimeController.update(TimeController.STEP)
-        TimeController.update(TimeController.STEP)
+        TimeController.update(STEP)
+        TimeController.update(STEP)
+        TimeController.update(STEP)
         assertEquals(true, ticked)
     }
 
@@ -70,9 +74,9 @@ class TimeTests {
             ticked = !ticked
         }
 
-        TimeController.update(TimeController.STEP)
+        TimeController.update(STEP)
         assertEquals(true, ticked)
-        TimeController.update(TimeController.STEP)
+        TimeController.update(STEP)
         assertEquals(false, ticked)
     }
 }

@@ -18,7 +18,7 @@ class SceneTests {
         controller.update(0f)
         assertEquals(true, scene.handledInput)
         assertEquals(true, scene.wasUpdated)
-        controller.render(0f)
+        controller.render()
         assertEquals(true, scene.wasRendered)
         controller.remove(scene)
         assertEquals(true, scene.wasRemoved)
@@ -90,7 +90,7 @@ class SceneTests {
             wasUpdated = true
         }
 
-        override fun render(deltaTime: Float) {
+        override fun render() {
             wasRendered = true
         }
 
